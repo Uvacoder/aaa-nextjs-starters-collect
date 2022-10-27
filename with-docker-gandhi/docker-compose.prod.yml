@@ -5,6 +5,10 @@ services:
     container_name: next-app-prod
     build:
       dockerfile: prod.Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./out:/app/out
     ports:
       - 3000:3000
     networks:

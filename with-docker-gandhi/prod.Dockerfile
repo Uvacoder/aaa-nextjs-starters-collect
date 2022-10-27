@@ -44,10 +44,20 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+COPY --from=builder /app/out ./out_temp
+COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
+
+RUN mkdir out
+RUN chown -R nextjs:nodejs out
+RUN chown -R nextjs:nodejs out_temp
+RUN chown nextjs:nodejs docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
+
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT 3000
 
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["node", "server.js"]
